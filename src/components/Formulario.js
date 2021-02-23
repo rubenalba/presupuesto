@@ -1,41 +1,44 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import Error from './Error';
 import shortid from 'shortid';
 
 
-const Formulario = () => {
+const Formulario = ({ agregarNuevoGasto }) => {
 
     const [nombreGasto, guardarNombre] = useState('');
-    const [cantidad,guardarCantidad] = useState(0);
+    const [cantidad, guardarCantidad] = useState(0);
     const [error, guardarError] = useState(false);
 
     //cuando el usario agrega un gasto
-    const agregarGasto = e=>{
+    const agregarGasto = e => {
 
         e.preventDefault();
         //validar
-        if(cantidad<1|| isNaN(cantidad)||nombreGasto.trim()===''){
+        if (cantidad < 1 || isNaN(cantidad) || nombreGasto.trim() === '') {
             guardarError(true);
             return;
         }
         guardarError(false);
         //construir el gasto
-const gasto = {
-    nombreGasto,
-    cantidad,
-    id: shortid.generate()
-}
-console.log(gasto);
+        const gasto = {
+            nombreGasto,
+            cantidad,
+            id: shortid.generate()
+        }
 
         //pasar el gasto al componente principal
+        agregarNuevoGasto(gasto);
+
         //resetear form
-}
+        guardarNombre('');
+        guardarCantidad(0);
+    }
 
 
     return (
-        <form onSubmit ={agregarGasto}>
+        <form onSubmit={agregarGasto}>
             <h2>Agrega tus gastos aquí</h2>
-            {error ? <Error mensaje="ambos campos son obligatorios o presupuesto incorrecto"/> : null}
+            {error ? <Error mensaje="ambos campos son obligatorios o presupuesto incorrecto" /> : null}
             <div className="campo">
                 <label>Nombre Gasto</label>
                 <input
@@ -43,7 +46,7 @@ console.log(gasto);
                     className="u-full-width"
                     placeholder="Ej. Transporte"
                     value={nombreGasto}
-                    onChange={e=>guardarNombre(e.target.value)}
+                    onChange={e => guardarNombre(e.target.value)}
                 ></input>
             </div>
             <div className="campo">
@@ -53,7 +56,7 @@ console.log(gasto);
                     className="u-full-width"
                     placeholder="300"
                     value={cantidad}
-                    onChange={e=>guardarCantidad(parseInt( e.target.value,10))}
+                    onChange={e => guardarCantidad(parseInt(e.target.value, 10))}
                 ></input>
             </div>
             <input
